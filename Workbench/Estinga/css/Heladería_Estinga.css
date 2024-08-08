@@ -88,8 +88,8 @@ footer {
     padding: 10px 0;
 }
 
-@media (max-width: 600px){
-    .header {
+@media (pointer: coarse){
+    header {
         font-size: 24px;
     }
     .content {
