@@ -87,14 +87,3 @@ footer {
     text-align: center;
     padding: 10px 0;
 }
-
-@media (pointer: coarse){
-    header {
-        font-size: 24px;
-    }
-    .content {
-        text-align: start;
-        font-size: 16px;
-    }
-
-}
