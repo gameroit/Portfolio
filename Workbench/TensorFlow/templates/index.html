@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <title>Simple Model Viewer</title>
+</head>
+<body>
+    <header>
+        <h1>Simple Model Viewer</h1>
+        <p>A simple viewer to test your models</p>
+    </header>
+
+    <div class="container">
+        <div id="video_container">
+            <h1>Real-time Camera</h1>
+            <video id="video" width="640" height="480" autoplay></video>
+            <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+            <p id="prediction"></p>
+        </div>
+        <div id="list_container">
+            <h1>Classes</h1>
+            <ol id="classes-list"></ol>
+        </div>
+    </div>
+    
+
+    <script>
+        // Load class names
+        function loadClasses() {
+            fetch('/classes')
+                .then(response => response.json())
+                .then(categories => {
+                    const list = document.getElementById('classes-list');
+                    list.innerHTML = '';
+                    categories.forEach(category => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = category;
+                        list.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error al cargar las categorías:', error));
+        } 
+        
+        // Load class names when page is ready
+        document.addEventListener('DOMContentLoaded', loadClasses);
+
+        // Access to user camera
+        const video = document.getElementById('video');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.srcObject = stream;
+                video.play();
+            });
+        }
+
+        // Send the image to the server
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        
+        function realTimeSending() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function(blob) {
+                const formData = new FormData();
+                formData.append('file', blob, 'capture.png');
+
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('prediction').innerText = `Clase: ${data.predicted_class} (Probability: ${data.confidence.toFixed(2)})`;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        };
+
+        // Repeat the sending function every 50ms
+        setInterval(realTimeSending, 50);
+    </script>
+</body>
+</html>
