@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="A viewer to test and demonstrate object detection models in real-time using your webcam.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <title>Object Detection Model Viewer</title>
+</head>
+<body>
+    <header>
+        <h1>Object Detection Model Viewer</h1>
+        <p>A simple viewer to test your object detection models</p>
+    </header>
+
+    <div class="container">
+        <div id="video_container">
+            <h1>Real-time Camera</h1>
+            <video id="video" width="640" height="480" autoplay></video>
+            <canvas id="canvas" width="640" height="480"></canvas>
+            <p id="prediction"></p>
+        </div>
+        <div id="list_container">
+            <h1>Classes</h1>
+            <ol id="classes-list"></ol>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

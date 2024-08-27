@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <title>Classification Model Application</title>
+</head>
+<body>
+    <header>
+        <h1>Classification Model Application</h1>
+        <p>A simple application to test your classification models</p>
+    </header>
+
+    <br>
+    <p>You can test this model writting one number between 0 and 9. <br>If there are a bad prediction, it may be due to rotation or size. </p>
+    <br>
+    
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <p id="prediction"></p>
+    <div id="buttons">
+        <button id="sendButton">Send Image</button>
+        <button id="clearButton">Clear Image</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>
